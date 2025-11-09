@@ -1,32 +1,40 @@
-# Part 2 Setting up the program
-import pandas as pd
-import matplotlib.pyplot as plt
 import os
 import sys
+import time
+import functools
 
-# Fix file path issues when running as .exe
+print = functools.partial(print, flush=True)
+
+print("Starting Data Analysis...")
+time.sleep(0.3)
+
+
 def resource_path(relative_path):
     try:
-        base_path = sys._MEIPASS  # Folder used by PyInstaller
+        base_path = sys._MEIPASS  
     except Exception:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
-csv_path = resource_path('rotten_tomatoes_movies.csv')
-movieData = pd.read_csv(csv_path)
 
+print("Loading libraries...")
+import pandas as pd
+import matplotlib.pyplot as plt
+print("Libraries loaded successfully!\n")
+csv_path = resource_path('rotten_tomatoes_movies.csv')
+movieData = pd.read_csv(csv_path, engine="pyarrow")
+
+print("Reading movie dataset...")
+movieData = pd.read_csv(csv_path, engine="pyarrow")
 
 pd.set_option('display.max_columns', None)
 pd.set_option('max_colwidth', None)
 
+print("Data loaded successfully!\n")
+
+
 favMovie = "Little Shop of Horrors"
-
 print("My favorite movie is " + favMovie)
-
-# Part 3 Investigate the data
-# print(movieData.head())
-# print(movieData["movie_title"])
-
 # Part 4 Filter data
 print("\nThe data for my favorite movie is:\n")
 
@@ -43,11 +51,9 @@ horrorMovieData = movieData.loc[horrorMovieBooleanList]
 
 numOfMovies = horrorMovieData.shape[0]
 
-print("We will be comparing " + favMovie +
-      " to other movies under the genre Horror in the data set.\n")
+print("We will be comparing " + favMovie +" to other movies under the genre Horror in the data set.\n")
 print("There are " + str(numOfMovies) + " movies under the category Horror.")
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
-
 # Part 5 Describe data
 # find min
 min = horrorMovieData['audience_rating'].min()
@@ -72,7 +78,6 @@ print("The median audience rating of the data set is: " + str(median))
 print(favMovie + " is higher than the median movie rating.")
 
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
-
 # Part 6 Create graphs
 # Create histogram
 plt.hist(horrorMovieData["audience_rating"], range=(0, 120), bins=20)
@@ -100,7 +105,6 @@ plt.xlabel("Audience Rating")
 plt.ylabel("Critic Rating")
 plt.xlim(0, 110)
 plt.ylim(0, 110)
-
 # Prints interpretation of scatterplot
 print("According to the scatter plot, Critic Ratings increase as Audience Ratings increase.\n")
 print("Close the graph by pressing the 'X' in the top right corner.")
